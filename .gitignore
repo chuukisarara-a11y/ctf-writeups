@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+# 题目附件、爆破字典、真实日志不要进仓库
+*.pcap
+*.zip
+wordlists/
+private/
