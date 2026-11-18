@@ -72,8 +72,12 @@ def cn_id_ok(idn: str) -> bool:
 
 def not_placeholder(v: str) -> bool:
     """过滤 password=*** / password=${PASS} / password=changeme 之类的占位值。"""
+    quoted = v[:1] in "'\"" and v[:1] != ""
     v = v.strip("'\"")
     if len(v) < 4:
+        return False
+    # 未加引号且形如函数调用/属性访问（password=get_pw(args)、pwd=cfg.db.pass）是代码而非密码
+    if not quoted and re.fullmatch(r"[A-Za-z_][\w.]*\(.*\)?|[a-z_]+(\.[a-z_]+)+\)*", v):
         return False
     if re.fullmatch(r"[*xX#.\-]+|<[^>]*>|\$\{?[A-Za-z_][\w]*\}?|%\(?\w+\)?s?", v):
         return False

@@ -122,6 +122,8 @@ class TestLogscan(unittest.TestCase):
     def test_password_placeholder_ignored(self):
         self.assertEqual(self.rules_hit("password=****** pwd=${DB_PASS} pass=<redacted>"), [])
         self.assertEqual(self.rules_hit("password=Hunter2024"), ["password-field"])
+        self.assertEqual(self.rules_hit("f(password=read_pw(args), pwd=cfg.db.pass)"), [])
+        self.assertEqual(self.rules_hit('password="Open(Sesame)"'), ["password-field"])
 
     def test_masking(self):
         f = next(logscan.scan_lines(["password=SuperSecret123"], "t", logscan.RULES))
