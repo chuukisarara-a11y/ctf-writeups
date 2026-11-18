@@ -1,0 +1,1 @@
+cryptography>=42  # 仅 tools/vault 需要
